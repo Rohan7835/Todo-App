@@ -2,7 +2,7 @@ import express from "express";
 import connectDB from "./DB/index.js";
 import dotenv from "dotenv";
 import { PORT } from "./constant.js";
-const app = express();
+import { app } from "./app.js";
 
 dotenv.config({
   path: ".env",
