@@ -11,10 +11,10 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please fill all details");
   }
   const existed = await User.findOne({
-    $or: [{ username }, { email }],
+    $or: [{ username }, { email }, { mobile }],
   });
   if (existed) {
-    throw new ApiError(400, "Username or email already exists.");
+    throw new ApiError(400, "Username, email or mobile already exists.");
   }
   const profile_picture_localpath = req.files?.profile_picture[0]?.path;
   if (!profile_picture_localpath) {
@@ -24,7 +24,6 @@ const registerUser = asyncHandler(async (req, res) => {
     profile_picture_localpath
   );
 
-  console.log("req.files?.profile_picture[0]", profile_pictureURL);
   if (!profile_pictureURL) {
     throw new ApiError(400, "Profile picture is required.");
   }

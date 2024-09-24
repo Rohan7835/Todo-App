@@ -20,6 +20,7 @@ const uploadOnCloudinary = async (localImagePath) => {
     const res = await cloudinary.uploader.upload(localImagePath, {
       resource_type: "auto",
     });
+    fs.unlinkSync(localImagePath);
     return res;
   } catch (error) {
     console.log("Cloudinary Error:", error);
