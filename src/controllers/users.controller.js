@@ -10,7 +10,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!username || !fullname || !email || !password || !mobile) {
     throw new ApiError(400, "Please fill all details");
   }
-  const existed = User.findOne({
+  const existed = await User.findOne({
     $or: [{ username }, { email }],
   });
   if (existed) {
@@ -24,6 +24,7 @@ const registerUser = asyncHandler(async (req, res) => {
     profile_picture_localpath
   );
 
+  console.log("req.files?.profile_picture[0]", profile_pictureURL);
   if (!profile_pictureURL) {
     throw new ApiError(400, "Profile picture is required.");
   }
