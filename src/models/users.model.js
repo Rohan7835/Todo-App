@@ -35,13 +35,17 @@ const userSchema = mongoose.Schema(
     refreshToken: {
       type: String,
     },
+    profile_picture: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true }
 );
 
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
-    this.password = bcrypt.hash(this.password, 10);
+    this.password = await bcrypt.hash(this.password, 10);
   }
   next();
 });
