@@ -1,10 +1,10 @@
-import { Category } from "../models/category.model.js";
+import { Subscribers } from "../models/subscribers.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-const addCategory = asyncHandler(async (req, res) => {
-  await Category.findByIdAndUpdate(
+const addSubscribers = asyncHandler(async (req, res) => {
+  await Subscribers.findByIdAndUpdate(
     req.user._id,
     {
       $set: {
@@ -17,8 +17,4 @@ const addCategory = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
-const deleteCategory = asyncHandler(async (req, res) => {});
-
-const updateCategory = asyncHandler(async (req, res) => {});
-
-export { addCategory, deleteCategory, updateCategory };
+export { addSubscribers };
