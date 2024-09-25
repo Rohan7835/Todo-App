@@ -161,4 +161,33 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken };
+const changePassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  if (oldPassword === newPassword) {
+    throw new ApiError(400, "New password cannot be same as old password");
+  }
+  const user = await User.findById(req.user);
+  const isPassCorrect = await user.isPasswordCorrect(oldPassword);
+  if (!isPassCorrect) {
+    throw new ApiError(400, "Incorrect Old Password");
+  }
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password changed successfully."));
+});
+
+const getUser = asyncHandler(async (req, res) => {
+  res.status(200).json(new ApiResponse(200, req.user, "User fetched"));
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshAccessToken,
+  changePassword,
+  getUser,
+};
