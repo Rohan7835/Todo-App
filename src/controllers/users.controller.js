@@ -182,6 +182,47 @@ const changePassword = asyncHandler(async (req, res) => {
 const getUser = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, req.user, "User fetched"));
 });
+const updateUser = asyncHandler(async (req, res) => {
+  const { fullname, email, mobile } = req.body;
+  if (!fullname && !email && !mobile) {
+    throw new ApiError(400, "Please fill all details");
+  }
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: { fullname, email, mobile },
+    },
+    {
+      new: true,
+    }
+  ).select("-password -refreshToken");
+
+  res.status(200).json(new ApiResponse(200, user, "User updated successfully"));
+});
+const changeProfilePicture = asyncHandler(async (req, res) => {
+  const profile_picture_localpath = req.file?.path;
+
+  if (!profile_picture_localpath) {
+    throw new ApiError(400, "Profile picture is required.");
+  }
+  const profile_picture = await uploadOnCloudinary(profile_picture_localpath);
+  if (!profile_picture) {
+    throw new ApiError(400, "Error occured while uploading file to server.");
+  }
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: { profile_picture: profile_picture.url },
+    },
+    {
+      new: true,
+    }
+  ).select("-password -refreshToken");
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, user, "Profile picture updated successfully"));
+});
 
 export {
   registerUser,
@@ -190,4 +231,6 @@ export {
   refreshAccessToken,
   changePassword,
   getUser,
+  updateUser,
+  changeProfilePicture,
 };
