@@ -3,6 +3,7 @@ import {
   changePassword,
   changeProfilePicture,
   getUser,
+  getUserChannelProfileDetails,
   loginUser,
   logoutUser,
   refreshAccessToken,
@@ -34,5 +35,8 @@ router
   .post(upload.single("profile-picture"), verifyJWT, changeProfilePicture);
 
 router.route("/refreshToken").post(refreshAccessToken);
+router
+  .route("/get-channel-details")
+  .post(verifyJWT, getUserChannelProfileDetails);
 
 export default router;

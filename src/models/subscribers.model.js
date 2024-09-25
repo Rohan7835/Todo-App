@@ -19,4 +19,4 @@ const SubscribersSchema = mongoose.Schema(
 
 SubscribersSchema.plugin(mongooseAggregatePaginate);
 
-export const Subscribers = mongoose.model("Subscribers", SubscribersSchema);
+export const Subscriber = mongoose.model("Subscriber", SubscribersSchema);

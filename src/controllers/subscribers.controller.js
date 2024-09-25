@@ -1,4 +1,4 @@
-import { Subscribers } from "../models/subscribers.model.js";
+import { Subscriber } from "../models/subscribers.model.js";
 import { User } from "../models/users.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -9,16 +9,9 @@ const subscribeToChannel = asyncHandler(async (req, res) => {
   if (!channel_id) {
     throw new ApiError(200, "Channel ID is required");
   }
-  const owner_user = await User.findById(channel_id).select(
-    "-password -refreshToken"
-  );
-  const sub_user = await User.findById(req.user._id).select(
-    "-password -refreshToken"
-  );
-
-  const sub = await Subscribers.create({
-    channel: owner_user,
-    subscriber: sub_user,
+  const sub = await Subscriber.create({
+    channel: channel_id,
+    subscriber: req.user?._id,
   });
   if (!sub) {
     throw new ApiError(200, "Error while subscribing");
