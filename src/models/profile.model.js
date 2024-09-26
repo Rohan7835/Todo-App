@@ -7,7 +7,7 @@ const ProfileSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
-    posted_blogs: [
+    favourite_blogs: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Blog",
