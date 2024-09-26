@@ -18,7 +18,24 @@ const addBlog = asyncHandler(async (req, res) => {
 });
 
 const getBlogs = asyncHandler(async (req, res) => {
-  const blogs = await Blog.find({ owner: req.user?._id });
+  const blogs = await Blog.aggregate([
+    {
+      $match: {
+        owner: req.user?._id,
+      },
+    },
+    {
+      $addFields: {
+        likes: {
+          $size: "$likes",
+        },
+        dislikes: {
+          $size: "$dislikes",
+        },
+      },
+    },
+  ]);
+
   if (!blogs?.length) {
     throw new ApiError(401, "Data not found");
   }
@@ -52,6 +69,9 @@ const likeBlog = asyncHandler(async (req, res) => {
   const blog = await Blog.findById(blog_id);
   if (!blog) {
     throw new ApiError(400, "Blog not found");
+  }
+  if (blog.likes.includes(req.user?._id)) {
+    throw new ApiError(400, "Blog already liked");
   }
   blog.likes.push(req.user?._id);
   blog.save();
