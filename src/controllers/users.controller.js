@@ -284,6 +284,10 @@ const getUserChannelProfileDetails = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, channelData[0], "Success"));
 });
 
+const getFavouriteBlogs = asyncHandler(async (req, res) => {
+  res.status(200).json(new ApiResponse(200, {}, "Success"));
+});
+
 export {
   registerUser,
   loginUser,
@@ -294,4 +298,5 @@ export {
   updateUser,
   changeProfilePicture,
   getUserChannelProfileDetails,
+  getFavouriteBlogs,
 };

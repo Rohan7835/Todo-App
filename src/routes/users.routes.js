@@ -2,6 +2,7 @@ import express from "express";
 import {
   changePassword,
   changeProfilePicture,
+  getFavouriteBlogs,
   getUser,
   getUserChannelProfileDetails,
   loginUser,
@@ -38,5 +39,6 @@ router.route("/refreshToken").post(refreshAccessToken);
 router
   .route("/get-channel-details")
   .post(verifyJWT, getUserChannelProfileDetails);
+router.route("/get-favourite-blogs").post(verifyJWT, getFavouriteBlogs);
 
 export default router;
