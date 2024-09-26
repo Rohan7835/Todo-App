@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { User } from "../models/users.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -285,7 +286,29 @@ const getUserChannelProfileDetails = asyncHandler(async (req, res) => {
 });
 
 const getFavouriteBlogs = asyncHandler(async (req, res) => {
-  res.status(200).json(new ApiResponse(200, {}, "Success"));
+  const blogs = await User.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(req.user?._id),
+      },
+    },
+    {
+      $lookup: {
+        from: "blogs",
+        localField: "posted_blogs",
+        foreignField: "owner",
+        as: "posted_blogs",
+      },
+    },
+    {
+      $project: {
+        username: 1,
+        posted_blogs: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json(new ApiResponse(200, blogs, "Success"));
 });
 
 export {
