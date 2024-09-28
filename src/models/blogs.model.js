@@ -15,6 +15,11 @@ const BlogsSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    owner_name: {
+      type: String,
+      required: true,
+    },
+    owner_username: String,
     views: {
       type: Number,
       default: 0,

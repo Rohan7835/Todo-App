@@ -13,6 +13,8 @@ const addBlog = asyncHandler(async (req, res) => {
     title,
     description,
     owner: req.user?._id,
+    owner_name: req.user?.fullname,
+    owner_username: req.user?.username,
   });
   res.status(200).json(new ApiResponse(200, _blog, "Blog added successfully."));
 });
